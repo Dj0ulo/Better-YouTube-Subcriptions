@@ -20,14 +20,29 @@
     active: true,
     url: "https://www.paypal.com/donate?hosted_button_id=VPF2BYBDBU5AA"
   });
+  const subscriptionsButton = document.getElementById("subscriptions");
+  subscriptionsButton.onclick = () => chrome.tabs.create({
+    active: true,
+    url: "https://www.youtube.com/feed/subscriptions"
+  });
 
   const save = await loadSettings();
   console.log(save);
 
   const optionsContainer = document.getElementById("options-container");
 
+  const switchButton = el("button", { 
+    id: ID_SWITCH_BUTTON, 
+    className: "style-scope ytd-toggle-button-renderer style-text",
+    disabled: true,
+  });
+
+  el("div", { className: "shorts-icon style-scope", innerHTML: ICON_SHORTS }, switchButton);
+
   //options
   Object.keys(Settings).forEach((category) => {
+    if(category === "State")
+      return;
     optionsContainer.append(titleSection(category));
 
     const sublist = el("ul", { className: "sublist", style: "display: block" }, optionsContainer);
@@ -40,9 +55,11 @@
         style: "display: inline-block"
       }, li);
 
+      let name = spec.name;
+      name = name.replace("$shorts_button", switchButton.outerHTML);
       const spanImg = el("span", {
         className: "titleOption",
-        innerHTML: spec.href ? `<a href=${spec.href}>${spec.name}</a>` : spec.name,
+        innerHTML: (spec.href ? `<a href=${spec.href}>${name}</a>` : name),
         title: spec.title ?? "",
         style: "padding-bottom: 2px"
       }, label);
@@ -56,7 +73,21 @@
                     display: inline-block;`;
         spanImg.prepend(img);
       }
-
+      console.log(spec);
+      if(spec.select){
+        const select = el("select", {
+          id: o,
+          className: "select",
+          onchange: () => {
+            save[o] = parseInt(select.value);
+            console.log(select.value);
+            saveSettings(save);
+          }
+        }, label);
+        spec.select.map((x,i) => el("option", { textContent: x, value:i }, select));
+        select.value = save[o];
+        return;
+      }
       if (typeof spec.default === 'number') {
 
         const slider = el("input", {

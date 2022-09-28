@@ -83,7 +83,7 @@
           if (short === undefined)
             return false;
           let condition = (!save.showShorts && short) || (!save.showWatched && !short && watched);
-          if(save.shortsTab)
+          if(save.shortsTab === 1)
             condition = condition || (save.showShorts && !short);
           return condition
         })
@@ -100,7 +100,7 @@
         });
     }
     const setTitleButtons = () => {
-      if(save.shortsTab)
+      if(save.shortsTab === 1)
         switchButton.title = save.showShorts ? "Switch to Videos Tab" : "Switch to Shorts Tab";
       else
         switchButton.title = save.showShorts ? "Hide Shorts" : "Show Shorts";

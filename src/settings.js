@@ -2,13 +2,13 @@
 const Settings = Object.freeze({
   Options: {
     shortsTab: {
-      name: "Shorts Tab",
-      title: "Clicking on the SHORTS button shows the Shorts and hides the normal videos.",
-      default: false,
+      name: "Behaviour of the button $shorts_button",
+      default: 0,
+      select : ["Show/Hide Shorts", "Switch to Video Tab/Shorts Tab"],
     },
     percentageWatched: {
-      name: "Min. watched %",
-      title: "A video is considered watched if it has been watched for at least this percentage of its duration",
+      name: "Threshold % of watched videos",
+      title: "A video is considered to be watched if you have watched at least this percentage of its total duration",
       default: 0.1,
       min: 0.1,
       max: 1,
