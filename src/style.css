@@ -1,9 +1,9 @@
-#switch-shorts {
+#better-youtube-subscriptions-switch-shorts {
     margin: 0 1em;
     height: 2em;
     cursor: pointer;
 }
-#switch-shorts > .shorts-icon{
+#better-youtube-subscriptions-switch-shorts > .shorts-icon{
     height: 100%;
 }
 #contents[display-video-kind="shorts"] .shorts-icon{
