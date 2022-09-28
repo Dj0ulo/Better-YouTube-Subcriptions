@@ -1,0 +1,40 @@
+{
+	"name": "Better YouTube Subscriptions",
+	"version": "1.0",
+	"manifest_version": 3,
+	"description": "YouTube Subscriptions of your dream !",
+	"icons": {
+		"128": "images/icon_128.png"
+	},
+	"permissions": [
+	],
+	"host_permissions": [
+  ],
+	"action": {
+		"default_popup": "src/popup/popup.html"
+	},
+	"background": {
+		"service_worker": "src/background.js"
+	},
+	"web_accessible_resources": [{
+		"resources": [
+      "src/style.css"
+    ],
+    "matches": [
+      "*://www.youtube.com/*"
+    ]
+  }],
+	"content_scripts": [
+		{
+			"run_at": "document_end",
+			"matches": [
+				"https://www.youtube.com/feed/subscriptions",
+				"https://www.youtube.com/feed/subscriptions?*"
+			],
+			"js": [
+				"src/utils.js",
+				"src/content_script.js"
+			]
+		}
+	]
+}

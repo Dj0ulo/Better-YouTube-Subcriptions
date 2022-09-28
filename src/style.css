@@ -1,0 +1,23 @@
+.switch-shorts {
+    margin: 0 1em;
+    height: 2em;
+    cursor: pointer;
+}
+.switch-shorts > .shorts-icon{
+    height: 100%;
+}
+#contents[display-video-kind="shorts"] .shorts-icon{
+    fill: var(--yt-spec-static-brand-red);
+}
+/* #contents[display-video-kind="videos"] .ytd-grid-renderer :has(ytd-thumbnail a#thumbnail[href^="/shorts"]),
+#contents[display-video-kind="shorts"] .ytd-grid-renderer :has(ytd-thumbnail a#thumbnail[href^="/watch"]){
+    display: none;
+}
+#contents[display-video-kind="videos"] .ytd-grid-renderer :has(ytd-thumbnail a#thumbnail[href^="/watch"]),
+#contents[display-video-kind="shorts"] .ytd-grid-renderer :has(ytd-thumbnail a#thumbnail[href^="/shorts"])  {
+    display: unset;
+} */
+
+[hidden] {
+    display: none;
+}
