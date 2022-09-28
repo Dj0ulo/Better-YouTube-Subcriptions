@@ -1,9 +1,9 @@
-.switch-shorts {
+#switch-shorts {
     margin: 0 1em;
     height: 2em;
     cursor: pointer;
 }
-.switch-shorts > .shorts-icon{
+#switch-shorts > .shorts-icon{
     height: 100%;
 }
 #contents[display-video-kind="shorts"] .shorts-icon{
@@ -18,6 +18,6 @@
     display: unset;
 } */
 
-[hidden] {
-    display: none;
+[better-hide-this-content] {
+    display: none !important;
 }

@@ -28,8 +28,7 @@
 		{
 			"run_at": "document_end",
 			"matches": [
-				"https://www.youtube.com/feed/subscriptions",
-				"https://www.youtube.com/feed/subscriptions?*"
+				"*://www.youtube.com/*"
 			],
 			"js": [
 				"src/utils.js",
