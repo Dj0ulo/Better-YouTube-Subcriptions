@@ -1,23 +1,16 @@
-#better-youtube-subscriptions-switch-shorts {
-    margin: 0 1em;
+#better-youtube-subscriptions-switch-shorts, 
+#better-youtube-subscriptions-show-watched {
+    margin: 0 0.5em;
     height: 2em;
     cursor: pointer;
 }
-#better-youtube-subscriptions-switch-shorts > .shorts-icon{
+#better-youtube-subscriptions-switch-shorts > .shorts-icon,
+#better-youtube-subscriptions-show-watched > .eye-icon{
     height: 100%;
 }
-#contents[display-video-kind="shorts"] .shorts-icon{
+#contents[display-video-kind="shorts"] .shorts-icon, #contents[display-watched="true"] .eye-icon{
     fill: var(--yt-spec-static-brand-red);
 }
-/* #contents[display-video-kind="videos"] .ytd-grid-renderer :has(ytd-thumbnail a#thumbnail[href^="/shorts"]),
-#contents[display-video-kind="shorts"] .ytd-grid-renderer :has(ytd-thumbnail a#thumbnail[href^="/watch"]){
-    display: none;
-}
-#contents[display-video-kind="videos"] .ytd-grid-renderer :has(ytd-thumbnail a#thumbnail[href^="/watch"]),
-#contents[display-video-kind="shorts"] .ytd-grid-renderer :has(ytd-thumbnail a#thumbnail[href^="/shorts"])  {
-    display: unset;
-} */
-
 [better-hide-this-content] {
     display: none !important;
 }
