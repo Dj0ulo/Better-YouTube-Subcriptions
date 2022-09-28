@@ -4,7 +4,8 @@
 	"manifest_version": 3,
 	"description": "YouTube Subscriptions of your dream !",
 	"icons": {
-		"128": "images/icon_128.png"
+		"128": "images/icon_128.png",
+		"1024": "images/icon_1024.png"
 	},
 	"permissions": [
 		"storage"
