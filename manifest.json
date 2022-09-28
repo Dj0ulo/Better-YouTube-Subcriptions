@@ -7,14 +7,10 @@
 		"128": "images/icon_128.png"
 	},
 	"permissions": [
+		"storage"
 	],
-	"host_permissions": [
-  ],
 	"action": {
-		"default_popup": "src/popup/popup.html"
-	},
-	"background": {
-		"service_worker": "src/background.js"
+		"default_popup": "src/pop-up/index.html"
 	},
 	"web_accessible_resources": [{
 		"resources": [
@@ -31,6 +27,7 @@
 				"*://www.youtube.com/*"
 			],
 			"js": [
+				"src/settings.js",
 				"src/utils.js",
 				"src/content_script.js"
 			]

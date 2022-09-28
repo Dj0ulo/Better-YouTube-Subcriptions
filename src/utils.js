@@ -1,5 +1,10 @@
 // GENERAL PURPOSE UTILS
 /**
+ * 
+ * @returns {boolean} true if we are on a chromium browser (otherwise we probably are on firefox)
+ */
+ function onChrome() {return typeof browser === 'undefined';}
+/**
 * Read file from this extension
 * @param {string} url 
 * @returns 
@@ -23,6 +28,13 @@ function el(tag, attr, parent) {
   }
   return x;
 }
+function hrefPopUp() {
+  document.querySelectorAll("a").forEach(ln => {
+    if (ln.href.startsWith("http"))
+      ln.onclick = () => chrome.tabs.create({ active: true, url: ln.href })
+  })
+}
+
 
 // UTILS FOR THIS APP
 
@@ -40,15 +52,3 @@ const showAll = () => {
 };
 const isSubcriptionsPage = (url) => url.startsWith("https://www.youtube.com/feed/subscriptions");
 const queryVideos = (section) => [...section.querySelectorAll(isGrid() ? 'ytd-grid-video-renderer' : 'ytd-expanded-shelf-contents-renderer')];
-const isShort = (video) => {
-  const thumbnailLink = video.querySelector('ytd-thumbnail a#thumbnail[href]');
-  if (!thumbnailLink)
-    return undefined;
-  return thumbnailLink.href.includes('/shorts/');
-};
-const isWatched = (video) => {
-  const progressBar = video.querySelector('#progress');
-  if (!progressBar)
-    return undefined;
-  return parseInt(progressBar.style.width) / 100 >= MIN_WATCHED;
-};

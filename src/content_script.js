@@ -1,4 +1,4 @@
-(async function () {
+(async function () { 
   console.debug("Better Youtube Subscriptions: Content Script Loaded");
   const startytInitialData = 'var ytInitialData = ';
   let ytInitialData = [...document.body.querySelectorAll('script')].find(e => e.innerHTML.trim().startsWith(startytInitialData))?.innerHTML.trim();
@@ -8,22 +8,39 @@
   const styles = ['style'];
   const cssContents = await Promise.all(styles.map(s => read(`src/${s}.css`)));
   el('style', { className: 'super-style', textContent: cssContents.join('\n') }, docHead);
+  let save = await loadSettings();
+  console.log(save);
 
   // GLOBAL VARIABLES
   let observerNewVideos = null;
-  let showShorts = false;
-  let showWatched = false;
   let switchButton = document.getElementById(ID_SWITCH_BUTTON);
   let showWatchedButton = document.getElementById(ID_SHOW_WATCHED);
   let prevIsGrid = isGrid();
   let nProgressBars = 0;
 
 
+  const isShort = (video) => {
+    const thumbnailLink = video.querySelector('ytd-thumbnail a#thumbnail[href]');
+    if (!thumbnailLink)
+      return undefined;
+    return thumbnailLink.href.includes('/shorts/');
+  };
+  const isWatched = (video) => {
+    const progressBar = video.querySelector('#progress');
+    if (!progressBar)
+      return undefined;
+    return parseInt(progressBar.style.width) / 100 >= save.percentageWatched;
+  };
+
+
   async function execute() {
     if (!isSubcriptionsPage(document.location.href)) {
       return
     }
-    console.debug("Executing on subscriptions page");
+    // console.debug("Executing on subscriptions page");
+
+    observerNewVideos?.disconnect();
+    showAll();
 
     const contents = await new Promise(resolve => {
       const getContents = () => document.querySelector("ytd-browse ytd-section-list-renderer > #contents");
@@ -65,7 +82,12 @@
           const watched = isWatched(e);
           if (short === undefined)
             return false;
-          return /*(showShorts && !short) ||*/ (!showShorts && short) || (!showWatched && !short && watched)
+          let condition = (!save.showShorts && short) || (!save.showWatched && !short && watched);
+          if(save.shortsTab)
+            condition = condition || (save.showShorts && !short);
+          if(save.watchedTab)
+            condition = condition || (save.showWatched && !short && !watched);
+          return condition
         })
         .forEach(e => {
           if (!isGrid()) {
@@ -81,8 +103,8 @@
     }
     const setup = (firstTime = true) => {
       prevIsGrid = isGrid();
-      contents.setAttribute("display-video-kind", showShorts ? "shorts" : "videos");
-      contents.setAttribute("display-watched", showWatched ? "true" : "false");
+      contents.setAttribute("display-video-kind", save.showShorts ? "shorts" : "videos");
+      contents.setAttribute("display-watched", save.showWatched ? "true" : "false");
       if (!firstTime)
         showAll();
       menuToTop();
@@ -94,7 +116,8 @@
       switchButton = el("button", { id: ID_SWITCH_BUTTON, className: "style-scope ytd-toggle-button-renderer style-text" });
       el("div", { className: "shorts-icon style-scope", innerHTML: ICON_SHORTS }, switchButton);
       switchButton.onclick = () => {
-        showShorts = !showShorts;
+        save.showShorts = !save.showShorts;
+        saveSettings(save);
         setup(false);
       };
     }
@@ -102,7 +125,8 @@
       showWatchedButton = el("button", { id: ID_SHOW_WATCHED, className: "style-scope ytd-toggle-button-renderer style-text" });
       el("div", { className: "eye-icon style-scope", innerHTML: ICON_EYE }, showWatchedButton);
       showWatchedButton.onclick = () => {
-        showWatched = !showWatched;
+        save.showWatched = !save.showWatched;
+        saveSettings(save);
         setup(false);
       };
     }
@@ -129,12 +153,17 @@
     if (oldHref != document.location.href) {
       if (isSubcriptionsPage(document.location.href)) {
         if (!isSubcriptionsPage(oldHref)) {
-          observerNewVideos?.disconnect();
-          showAll();
           execute();
         }
       }
       oldHref = document.location.href;
+    }
+  });
+
+  chrome.runtime.onMessage.addListener(async (msg) => {
+    if(msg === 'execute'){
+      save = await loadSettings();
+      execute();
     }
   });
 })();
