@@ -3,12 +3,7 @@ const Settings = Object.freeze({
   Options: {
     shortsTab: {
       name: "Shorts Tab",
-      title: "Clicking on the SHORTS button only shows the Shorts",
-      default: false,
-    },
-    watchedTab: {
-      name: "Watched videos Tab",
-      title: "Clicking on the WATCHED button only shows the videos that have been watched",
+      title: "Clicking on the SHORTS button shows the Shorts and hides the normal videos.",
       default: false,
     },
     percentageWatched: {

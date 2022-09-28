@@ -85,8 +85,6 @@
           let condition = (!save.showShorts && short) || (!save.showWatched && !short && watched);
           if(save.shortsTab)
             condition = condition || (save.showShorts && !short);
-          if(save.watchedTab)
-            condition = condition || (save.showWatched && !short && !watched);
           return condition
         })
         .forEach(e => {
@@ -101,6 +99,14 @@
           }
         });
     }
+    const setTitleButtons = () => {
+      if(save.shortsTab)
+        switchButton.title = save.showShorts ? "Switch to Videos Tab" : "Switch to Shorts Tab";
+      else
+        switchButton.title = save.showShorts ? "Hide Shorts" : "Show Shorts";
+      showWatchedButton.title = (save.showWatched ? "Hide" : "Show")+" videos you watched more than " + save.percentageWatched * 100 + "%";
+    }
+
     const setup = (firstTime = true) => {
       prevIsGrid = isGrid();
       contents.setAttribute("display-video-kind", save.showShorts ? "shorts" : "videos");
@@ -108,12 +114,17 @@
       if (!firstTime)
         showAll();
       menuToTop();
+      setTitleButtons();
       hideFrom(queryVideos(contents));
       nProgressBars = 0;
     }
 
     if (!switchButton) {
-      switchButton = el("button", { id: ID_SWITCH_BUTTON, className: "style-scope ytd-toggle-button-renderer style-text" });
+      switchButton = el("button", { 
+        id: ID_SWITCH_BUTTON, 
+        className: "style-scope ytd-toggle-button-renderer style-text",
+      });
+
       el("div", { className: "shorts-icon style-scope", innerHTML: ICON_SHORTS }, switchButton);
       switchButton.onclick = () => {
         save.showShorts = !save.showShorts;
@@ -122,7 +133,10 @@
       };
     }
     if (!showWatchedButton) {
-      showWatchedButton = el("button", { id: ID_SHOW_WATCHED, className: "style-scope ytd-toggle-button-renderer style-text" });
+      showWatchedButton = el("button", { 
+        id: ID_SHOW_WATCHED, 
+        className: "style-scope ytd-toggle-button-renderer style-text",
+      });
       el("div", { className: "eye-icon style-scope", innerHTML: ICON_EYE }, showWatchedButton);
       showWatchedButton.onclick = () => {
         save.showWatched = !save.showWatched;
