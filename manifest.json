@@ -2,7 +2,7 @@
 	"name": "Better YouTube Subscriptions",
 	"version": "1.0",
 	"manifest_version": 3,
-	"description": "YouTube Subscriptions of your dream !",
+	"description": "Hide YouTube Shorts and videos you have already watched from your subscriptions feed !",
 	"icons": {
 		"128": "images/icon_128.png",
 		"1024": "images/icon_1024.png"

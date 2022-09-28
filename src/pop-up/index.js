@@ -27,7 +27,6 @@
   });
 
   const save = await loadSettings();
-  console.log(save);
 
   const optionsContainer = document.getElementById("options-container");
 
@@ -73,14 +72,12 @@
                     display: inline-block;`;
         spanImg.prepend(img);
       }
-      console.log(spec);
       if(spec.select){
         const select = el("select", {
           id: o,
           className: "select",
           onchange: () => {
             save[o] = parseInt(select.value);
-            console.log(select.value);
             saveSettings(save);
           }
         }, label);

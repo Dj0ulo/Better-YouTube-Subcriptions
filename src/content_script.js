@@ -1,5 +1,5 @@
 (async function () { 
-  console.debug("Better Youtube Subscriptions: Content Script Loaded");
+  console.debug("Better Youtube Subscriptions is running !");
   const startytInitialData = 'var ytInitialData = ';
   let ytInitialData = [...document.body.querySelectorAll('script')].find(e => e.innerHTML.trim().startsWith(startytInitialData))?.innerHTML.trim();
   ytInitialData = JSON.parse(ytInitialData.slice(startytInitialData.length, -1));
@@ -9,7 +9,6 @@
   const cssContents = await Promise.all(styles.map(s => read(`src/${s}.css`)));
   el('style', { className: 'super-style', textContent: cssContents.join('\n') }, docHead);
   let save = await loadSettings();
-  console.log(save);
 
   // GLOBAL VARIABLES
   let observerNewVideos = null;
@@ -37,7 +36,6 @@
     if (!isSubcriptionsPage(document.location.href)) {
       return
     }
-    // console.debug("Executing on subscriptions page");
 
     observerNewVideos?.disconnect();
     showAll();
