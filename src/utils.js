@@ -46,9 +46,9 @@ const ID_SWITCH_BUTTON = "better-youtube-subscriptions-switch-shorts";
 const ID_SHOW_WATCHED = "better-youtube-subscriptions-show-watched";
 const MIN_WATCHED = 0.1;
 
-const isGrid = () => !!document.querySelector("ytd-grid-renderer");
+const isGrid = () => !!document.querySelector("ytd-grid-renderer, ytd-rich-grid-renderer");
 const showAll = () => {
   document.querySelectorAll(`[${ATTR_HIDDEN}]`).forEach(e => e.removeAttribute(ATTR_HIDDEN));
 };
 const isSubcriptionsPage = (url) => url.startsWith("https://www.youtube.com/feed/subscriptions");
-const queryVideos = (section) => [...section.querySelectorAll(isGrid() ? 'ytd-grid-video-renderer' : 'ytd-expanded-shelf-contents-renderer')];
+const queryVideos = (section) => [...section.querySelectorAll(isGrid() ? 'ytd-grid-video-renderer, ytd-rich-item-renderer' : 'ytd-expanded-shelf-contents-renderer')];

@@ -1,5 +1,8 @@
 (async function () { 
   console.debug("Better Youtube Subscriptions is running !");
+
+  const SECTION_SELECTOR = 'ytd-item-section-renderer, ytd-rich-section-renderer';
+
   const startytInitialData = 'var ytInitialData = ';
   let ytInitialData = [...document.body.querySelectorAll('script')].find(e => e.innerHTML.trim().startsWith(startytInitialData))?.innerHTML.trim();
   ytInitialData = JSON.parse(ytInitialData.slice(startytInitialData.length, -1));
@@ -41,7 +44,7 @@
     showAll();
 
     const contents = await new Promise(resolve => {
-      const getContents = () => document.querySelector("ytd-browse ytd-section-list-renderer > #contents");
+      const getContents = () => document.querySelector("ytd-browse ytd-section-list-renderer > #contents, ytd-browse ytd-rich-grid-renderer > #contents");
       let ct = getContents();
       if (ct)
         return resolve(ct);
@@ -56,9 +59,10 @@
     });
 
     // FUNCTIONS THAT DEPEND ON THE contents VARIABLE
-    const querySections = () => [...contents.querySelectorAll("ytd-item-section-renderer")];
+    let menuDisplayed = false;
+    const querySections = () => [...contents.querySelectorAll(SECTION_SELECTOR)];
     const menuButtons = () => {
-      const manageSubscriptions = [...contents.querySelectorAll('ytd-item-section-renderer #title-container #subscribe-button')]
+      const manageSubscriptions = [...contents.querySelectorAll(`ytd-item-section-renderer #title-container #subscribe-button, ytd-rich-section-renderer #title-container #subscribe-button`)]
         .find(button => button.innerHTML.trim() !== "");
       const menu = [...manageSubscriptions.parentNode.querySelectorAll('#menu')].find(button => button.innerHTML.trim() !== "");
       return [manageSubscriptions, menu];
@@ -70,6 +74,7 @@
         menuButtons().forEach(button => titleContainer.appendChild(button));
         titleContainer.appendChild(switchButton);
         titleContainer.appendChild(showWatchedButton);
+        menuDisplayed = true;
       }
     }
 
@@ -151,8 +156,10 @@
         hideFrom(queryVideos(contents));
         nProgressBars = progressBars.length;
       }
-      const itemSections = [...mutationRecords[0].addedNodes].filter(n => n.matches("ytd-item-section-renderer"));
+      const itemSections = mutationRecords.map(m=>[...m.addedNodes]).flat().filter(n => n.matches && n.matches(SECTION_SELECTOR));
       itemSections.forEach(section => hideFrom(queryVideos(section)));
+      if (!menuDisplayed)
+        menuToTop();
     });
     observerNewVideos.observe(contents, { childList: true, subtree: true });
     setup();
